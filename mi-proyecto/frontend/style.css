@@ -1,0 +1,839 @@
+/* ─── VARIABLES MODO CLARO ───────────────────────────────────── */
+:root {
+    --orange:         #f05a1a;
+    --orange-light:   #ff7a3d;
+    --orange-pale:    #ff9d6e;
+    --orange-dim:     #fff0e8;
+    --orange-glow:    rgba(240,90,26,.2);
+    --cream:          #fdf8f4;
+    --cream-2:        #f5ece2;
+    --dark:           #1a1208;
+    --dark-mid:       #3d2e1e;
+    --mid:            #7a6555;
+    --mid-light:      #b8a898;
+    --border:         #ead8cc;
+    --border-2:       #d6c0b0;
+    --card-bg:        #ffffff;
+    --input-bg:       #fdf8f4;
+    --header-bg:      rgba(253,248,244,.9);
+    --shadow-sm:      0 2px 10px rgba(26,18,8,.07);
+    --shadow-md:      0 8px 36px rgba(26,18,8,.13);
+    --shadow-lg:      0 24px 72px rgba(26,18,8,.18);
+    --shadow-xl:      0 40px 100px rgba(26,18,8,.22);
+    --radius-sm:      10px;
+    --radius-md:      18px;
+    --radius-lg:      26px;
+    --radius-xl:      36px;
+    --font-display:   'Playfair Display', serif;
+    --font-body:      'DM Sans', sans-serif;
+    --ease:           cubic-bezier(.4,0,.2,1);
+    --ease-spring:    cubic-bezier(.34,1.56,.64,1);
+    --t:              0.22s;
+    --t-slow:         0.45s;
+  }
+  
+  /* ─── VARIABLES MODO OSCURO ──────────────────────────────────── */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --orange:         #ff7c42;
+      --orange-light:   #ff9d6e;
+      --orange-pale:    #ffb88a;
+      --orange-dim:     rgba(255,124,66,.12);
+      --orange-glow:    rgba(255,124,66,.28);
+      --cream:          #0d0805;
+      --cream-2:        #160e08;
+      --dark:           #f0e4d8;
+      --dark-mid:       #c8b4a0;
+      --mid:            #7a6a5a;
+      --mid-light:      #4a3a2c;
+      --border:         #281a10;
+      --border-2:       #3a2418;
+      --card-bg:        #180f08;
+      --input-bg:       #110908;
+      --header-bg:      rgba(13,8,5,.92);
+      --shadow-sm:      0 2px 10px rgba(0,0,0,.4);
+      --shadow-md:      0 8px 36px rgba(0,0,0,.5);
+      --shadow-lg:      0 24px 72px rgba(0,0,0,.6);
+      --shadow-xl:      0 40px 100px rgba(0,0,0,.7);
+    }
+  }
+  
+  /* ─── BASE ───────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; scroll-behavior: smooth; }
+  
+  body {
+    min-height: 100vh;
+    background: var(--cream);
+    font-family: var(--font-body);
+    color: var(--dark);
+    overflow-x: hidden;
+    transition: background var(--t-slow) var(--ease), color var(--t-slow) var(--ease);
+  }
+  
+  /* Textura de ruido sutil */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+  
+  /* ─── BLOBS ──────────────────────────────────────────────────── */
+  .bg-blobs {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none; overflow: hidden;
+  }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(100px); opacity: 0.28;
+  }
+  .blob-1 {
+    width: 800px; height: 800px;
+    background: radial-gradient(circle at 35% 35%, #ffb070, #f05a1a 50%, transparent 70%);
+    top: -300px; right: -250px;
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .blob-2 {
+    width: 550px; height: 550px;
+    background: radial-gradient(circle at 60% 60%, #ffd4a0, #e07030 50%, transparent 70%);
+    bottom: -180px; left: -180px;
+    animation: drift 28s ease-in-out infinite alternate-reverse;
+  }
+  .blob-3 {
+    width: 380px; height: 380px;
+    background: radial-gradient(circle at 50% 50%, #ffe4c0, #f09050 50%, transparent 70%);
+    top: 38%; left: 22%;
+    animation: drift 19s ease-in-out infinite alternate;
+  }
+  .blob-4 {
+    width: 220px; height: 220px;
+    background: radial-gradient(circle at 50% 50%, #ffc8a0, transparent 70%);
+    top: 65%; right: 12%;
+    animation: drift 14s ease-in-out infinite alternate-reverse;
+    opacity: 0.18;
+  }
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1) rotate(0deg); }
+    to   { transform: translate(45px,55px) scale(1.12) rotate(6deg); }
+  }
+  
+  /* ─── FORMAS DECORATIVAS FLOTANTES ──────────────────────────── */
+  .deco-shapes {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  
+  /* Anillos */
+  .deco-ring {
+    position: absolute; border-radius: 50%;
+    border: 1.5px solid var(--border-2);
+    opacity: 0.5;
+  }
+  .deco-ring-1 {
+    width: 340px; height: 340px;
+    top: -80px; left: -100px;
+    animation: rotateRing 30s linear infinite;
+  }
+  .deco-ring-2 {
+    width: 200px; height: 200px;
+    bottom: 8%; right: 6%;
+    border-style: dashed;
+    animation: rotateRing 20s linear infinite reverse;
+    opacity: 0.3;
+  }
+  @keyframes rotateRing {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  
+  /* Puntos decorativos */
+  .deco-dot {
+    position: absolute; border-radius: 50%;
+    background: var(--orange);
+    opacity: 0.15;
+  }
+  .deco-dot-1 { width: 10px; height: 10px; top: 18%; left: 6%; animation: pulseDot 4s ease-in-out infinite; }
+  .deco-dot-2 { width: 6px;  height: 6px;  top: 55%; right: 8%; animation: pulseDot 5s ease-in-out infinite 1s; }
+  .deco-dot-3 { width: 14px; height: 14px; bottom: 20%; left: 15%; animation: pulseDot 6s ease-in-out infinite 0.5s; }
+  @keyframes pulseDot {
+    0%,100% { transform: scale(1); opacity: 0.15; }
+    50%      { transform: scale(1.8); opacity: 0.3; }
+  }
+  
+  /* Líneas decorativas */
+  .deco-line {
+    position: absolute; background: var(--border-2);
+    opacity: 0.4;
+  }
+  .deco-line-1 {
+    width: 1px; height: 120px;
+    top: 30%; right: 4%;
+    animation: fadeUpDown 6s ease-in-out infinite;
+  }
+  .deco-line-2 {
+    width: 80px; height: 1px;
+    bottom: 28%; left: 4%;
+    animation: fadeUpDown 7s ease-in-out infinite 1s;
+  }
+  @keyframes fadeUpDown {
+    0%,100% { opacity: 0.2; transform: scaleY(0.7); }
+    50%      { opacity: 0.5; transform: scaleY(1); }
+  }
+  
+  /* ─── PANTALLAS ──────────────────────────────────────────────── */
+  .screen { position: relative; z-index: 1; }
+  .hidden { display: none !important; }
+  
+  /* ─── AUTH CARD ──────────────────────────────────────────────── */
+  .auth-card {
+    width: 440px;
+    max-width: calc(100vw - 32px);
+    margin: 60px auto 0;
+    background: var(--card-bg);
+    border-radius: var(--radius-xl);
+    padding: 52px 44px 44px;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    animation: slideUp 0.5s var(--ease) both;
+    transition: background var(--t-slow) var(--ease), border-color var(--t-slow) var(--ease);
+  }
+  
+  /* Línea de gradiente superior */
+  .auth-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--orange) 30%, var(--orange-light) 60%, transparent 100%);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  
+  /* Decoración esquina superior izquierda */
+  .auth-card-deco-tl {
+    position: absolute; top: -1px; left: -1px;
+    width: 90px; height: 90px;
+    border-top: 2px solid var(--orange);
+    border-left: 2px solid var(--orange);
+    border-radius: var(--radius-xl) 0 0 0;
+    opacity: 0.4;
+  }
+  
+  /* Decoración esquina inferior derecha */
+  .auth-card-deco-br {
+    position: absolute; bottom: -1px; right: -1px;
+    width: 60px; height: 60px;
+    border-bottom: 2px solid var(--border-2);
+    border-right: 2px solid var(--border-2);
+    border-radius: 0 0 var(--radius-xl) 0;
+    opacity: 0.5;
+  }
+  
+  /* Patrón de puntos fondo */
+  .auth-card::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 160px; height: 160px;
+    background-image: radial-gradient(circle, var(--border-2) 1.2px, transparent 1.2px);
+    background-size: 14px 14px;
+    opacity: 0.45;
+    border-radius: 0 var(--radius-xl) 0 0;
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  
+  /* ─── BRAND ──────────────────────────────────────────────────── */
+  .brand {
+    text-align: center;
+    margin-bottom: 38px;
+    position: relative; z-index: 1;
+  }
+  
+  .brand-icon-wrap {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--orange-dim), var(--cream-2));
+    border: 1.5px solid var(--border-2);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px var(--orange-glow);
+    transition: background var(--t-slow) var(--ease), border-color var(--t-slow) var(--ease);
+  }
+  
+  .brand-icon {
+    display: inline-block;
+    font-size: 1.6rem;
+    color: var(--orange);
+    animation: spin 10s linear infinite;
+    filter: drop-shadow(0 0 6px var(--orange-glow));
+  }
+  .brand-icon.small { font-size: 1rem; }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  
+  .brand h1 {
+    font-family: var(--font-display);
+    font-size: 2.3rem; font-weight: 700;
+    color: var(--dark); line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+    transition: color var(--t-slow) var(--ease);
+  }
+  
+  .brand-sub {
+    font-size: 0.82rem; font-weight: 400;
+    color: var(--mid); letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  
+  /* ─── FORMULARIOS ────────────────────────────────────────────── */
+  .form-group { margin-bottom: 18px; position: relative; z-index: 1; }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--dark-mid); margin-bottom: 7px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: color var(--t-slow) var(--ease);
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 13px 16px;
+    font-family: var(--font-body); font-size: 0.95rem;
+    color: var(--dark);
+    outline: none; resize: none;
+    transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease),
+                background var(--t-slow) var(--ease), color var(--t-slow) var(--ease);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--mid-light); }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--orange);
+    background: var(--card-bg);
+    box-shadow: 0 0 0 4px var(--orange-glow);
+  }
+  
+  .char-counter {
+    display: flex; justify-content: flex-end;
+    font-size: 0.7rem; color: var(--mid-light);
+    margin-top: 4px;
+    transition: color var(--t) var(--ease);
+  }
+  .char-counter.warn { color: var(--orange); }
+  
+  /* ─── BOTONES ────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-body); font-size: 0.88rem; font-weight: 600;
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer; white-space: nowrap;
+    transition: all var(--t) var(--ease);
+    position: relative; overflow: hidden;
+    letter-spacing: 0.02em;
+  }
+  
+  /* Shimmer */
+  .btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.18) 50%, transparent 65%);
+    transform: translateX(-100%);
+    transition: transform 0.55s ease;
+  }
+  .btn:hover::before { transform: translateX(100%); }
+  
+  .btn-primary {
+    width: 100%; padding: 14px 22px; margin-top: 8px;
+    background: linear-gradient(130deg, var(--orange) 0%, var(--orange-light) 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px var(--orange-glow), inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px var(--orange-glow);
+    filter: brightness(1.07);
+  }
+  .btn-primary:active { transform: translateY(0); box-shadow: 0 2px 8px var(--orange-glow); }
+  
+  .btn-arrow {
+    font-size: 1rem;
+    transition: transform var(--t) var(--ease);
+  }
+  .btn-primary:hover .btn-arrow { transform: translateX(4px); }
+  
+  .btn-plus {
+    font-size: 1.2rem; font-weight: 300; line-height: 1;
+  }
+  
+  .btn-ghost {
+    padding: 10px 18px;
+    background: transparent; color: var(--dark-mid);
+    border: 1.5px solid var(--border);
+  }
+  .btn-ghost:hover {
+    background: var(--orange-dim);
+    border-color: var(--orange); color: var(--orange);
+  }
+  
+  .btn-sm { padding: 9px 16px; font-size: 0.82rem; width: auto; margin-top: 0; }
+  
+  .btn-danger {
+    padding: 8px 13px; font-size: 0.8rem; width: auto; margin-top: 0;
+    background: transparent; color: #c0392b;
+    border: 1.5px solid rgba(192,57,43,.2);
+    border-radius: var(--radius-sm);
+  }
+  .btn-danger:hover {
+    background: #c0392b; color: white; border-color: #c0392b;
+    box-shadow: 0 4px 14px rgba(192,57,43,.3);
+  }
+  
+  .btn-edit {
+    padding: 8px 13px; font-size: 0.8rem; width: auto; margin-top: 0;
+    background: transparent; color: var(--orange);
+    border: 1.5px solid rgba(240,90,26,.2);
+    border-radius: var(--radius-sm);
+  }
+  .btn-edit:hover {
+    background: var(--orange); color: white; border-color: var(--orange);
+    box-shadow: 0 4px 14px var(--orange-glow);
+  }
+  
+  /* ─── AUTH SWITCH ────────────────────────────────────────────── */
+  .auth-switch {
+    text-align: center; margin-top: 22px;
+    font-size: 0.87rem; color: var(--mid);
+    position: relative; z-index: 1;
+  }
+  .auth-switch a {
+    color: var(--orange); font-weight: 600; cursor: pointer;
+    text-decoration: none; position: relative;
+  }
+  .auth-switch a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 1.5px; background: var(--orange);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--t) var(--ease);
+  }
+  .auth-switch a:hover::after { transform: scaleX(1); }
+  
+  /* ─── HEADER ─────────────────────────────────────────────────── */
+  .app-header {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 36px;
+    background: var(--header-bg);
+    backdrop-filter: blur(18px) saturate(1.5);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    border-bottom: 1px solid var(--border);
+    transition: background var(--t-slow) var(--ease), border-color var(--t-slow) var(--ease);
+  }
+  
+  /* Barra inferior naranja animada */
+  .app-header::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0;
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-light));
+    border-radius: 0 2px 2px 0;
+  }
+  
+  .header-brand { display: flex; align-items: center; gap: 10px; }
+  
+  .header-icon-wrap {
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--orange-dim);
+    border-radius: 8px; border: 1px solid var(--border-2);
+    transition: background var(--t-slow) var(--ease);
+  }
+  
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--dark); letter-spacing: -0.01em;
+    transition: color var(--t-slow) var(--ease);
+  }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  
+  /* ─── NOTES MAIN ─────────────────────────────────────────────── */
+  .notes-main { max-width: 1200px; margin: 0 auto; padding: 44px 28px 80px; }
+  
+  .notes-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    transition: border-color var(--t-slow) var(--ease);
+  }
+  .notes-header-left { display: flex; align-items: center; gap: 14px; }
+  
+  .notes-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.9rem; font-weight: 700;
+    color: var(--dark); letter-spacing: -0.02em;
+    transition: color var(--t-slow) var(--ease);
+  }
+  
+  .notes-count {
+    font-size: 0.75rem; font-weight: 700;
+    background: var(--orange-dim); color: var(--orange);
+    padding: 4px 12px; border-radius: 20px;
+    border: 1px solid rgba(240,90,26,.18);
+    letter-spacing: 0.04em;
+    transition: background var(--t-slow) var(--ease);
+  }
+  
+  /* ─── GRID ───────────────────────────────────────────────────── */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 22px;
+  }
+  
+  /* ─── NOTE CARD ──────────────────────────────────────────────── */
+  .note-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border);
+    padding: 0 0 16px;
+    display: flex; flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease),
+                background var(--t-slow) var(--ease), border-color var(--t-slow) var(--ease);
+    animation: fadeIn 0.35s ease both;
+    position: relative; overflow: hidden;
+  }
+  
+  .note-card:hover {
+    transform: translateY(-5px) scale(1.008);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-2);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Barra de color superior completa */
+  .note-card-accent {
+    height: 5px; width: 100%;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+  
+  .note-card-body { padding: 0 22px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  
+  .note-number {
+    font-size: 0.65rem; font-weight: 700;
+    color: var(--mid-light); letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .note-card h4 {
+    font-family: var(--font-display);
+    font-size: 1.08rem; font-weight: 700;
+    color: var(--dark); line-height: 1.3;
+    letter-spacing: -0.01em;
+    transition: color var(--t-slow) var(--ease);
+  }
+  
+  .note-card p {
+    font-size: 0.875rem; color: var(--mid);
+    line-height: 1.65; flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+    transition: color var(--t-slow) var(--ease);
+  }
+  
+  .note-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 14px;
+    transition: border-color var(--t-slow) var(--ease);
+  }
+  
+  .note-date {
+    font-size: 0.7rem; color: var(--mid-light);
+    font-weight: 500; letter-spacing: 0.03em;
+    transition: color var(--t-slow) var(--ease);
+  }
+  
+  .note-actions {
+    display: flex; gap: 6px;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);
+  }
+  .note-card:hover .note-actions,
+  .note-card:focus-within .note-actions { opacity: 1; transform: translateY(0); }
+  
+  /* ─── ESTADO VACÍO ───────────────────────────────────────────── */
+  .empty-state {
+    grid-column: 1 / -1; text-align: center;
+    padding: 90px 20px; color: var(--mid);
+  }
+  .empty-icon-wrap {
+    width: 90px; height: 90px; margin: 0 auto 22px;
+    background: linear-gradient(135deg, var(--orange-dim), var(--cream-2));
+    border-radius: 28px; border: 2px dashed var(--border-2);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px var(--orange-glow);
+    transition: background var(--t-slow) var(--ease);
+  }
+  .empty-icon { font-size: 2.5rem; animation: float 3s ease-in-out infinite alternate; display: block; }
+  @keyframes float {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-8px); }
+  }
+  .empty-state strong {
+    display: block; font-family: var(--font-display);
+    font-size: 1.3rem; font-weight: 700; color: var(--dark);
+    margin-bottom: 8px; letter-spacing: -0.01em;
+    transition: color var(--t-slow) var(--ease);
+  }
+  .empty-state p { font-size: 0.95rem; font-weight: 300; line-height: 1.7; }
+  
+  /* ─── MODAL ──────────────────────────────────────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(8,4,2,.65);
+    backdrop-filter: blur(8px) saturate(0.7);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: fadeOverlay 0.25s ease both;
+  }
+  @keyframes fadeOverlay {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  
+  .modal-card {
+    width: 540px; max-width: 100%;
+    background: var(--card-bg);
+    border-radius: var(--radius-xl);
+    padding: 0 0 32px;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    animation: modalIn 0.38s var(--ease-spring) both;
+    transition: background var(--t-slow) var(--ease), border-color var(--t-slow) var(--ease);
+  }
+  
+  /* Barra superior animada del modal */
+  .modal-top-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-light), var(--orange-pale), var(--orange-light), var(--orange));
+    background-size: 300% 100%;
+    animation: barMove 3s linear infinite;
+  }
+  @keyframes barMove {
+    from { background-position: 0% 0; }
+    to   { background-position: 300% 0; }
+  }
+  
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(24px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 36px 0;
+    margin-bottom: 24px;
+  }
+  .modal-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--dark); letter-spacing: -0.02em;
+    transition: color var(--t-slow) var(--ease);
+  }
+  .modal-close {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: var(--input-bg);
+    color: var(--mid); font-size: 0.85rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--t) var(--ease);
+  }
+  .modal-close:hover {
+    background: var(--orange-dim); border-color: var(--orange);
+    color: var(--orange); transform: rotate(90deg);
+  }
+  
+  .modal-card .form-group { padding: 0 36px; }
+  
+  .modal-footer {
+    display: flex; justify-content: flex-end; gap: 10px;
+    padding: 20px 36px 0;
+    border-top: 1px solid var(--border);
+    transition: border-color var(--t-slow) var(--ease);
+  }
+  .modal-footer .btn-ghost,
+  .modal-footer .btn-primary { width: auto; margin-top: 0; }
+  
+  /* ─── SCROLLBAR ──────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+  ::selection { background: var(--orange-glow); color: var(--dark); }
+  
+  /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .notes-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .note-actions { opacity: 1; transform: none; }
+  }
+  @media (max-width: 600px) {
+    .auth-card { padding: 40px 22px 32px; margin-top: 32px; }
+    .app-header { padding: 12px 16px; }
+    .notes-main { padding: 24px 16px 60px; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .modal-card { border-radius: var(--radius-lg); }
+    .modal-header, .modal-card .form-group, .modal-footer { padding-left: 22px; padding-right: 22px; }
+    .brand h1 { font-size: 2rem; }
+    .deco-shapes { display: none; }
+  }
+
+/* ─── FIRMA ──────────────────────────────────────────────────── */
+.firma {
+  position: absolute;
+  bottom: 16px; right: 20px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--orange);
+  letter-spacing: 0.06em;
+  opacity: 0.35;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.3s ease, color var(--t-slow) ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.firma::before {
+  content: '✦';
+  font-style: normal;
+  font-size: 0.55rem;
+  opacity: 0.7;
+}
+.firma:hover { opacity: 0.85; }
+
+.app-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 36px 20px;
+  border-top: 1px solid var(--border);
+  transition: border-color var(--t-slow) ease;
+}
+.firma-footer {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--orange);
+  letter-spacing: 0.06em;
+  opacity: 0.35;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.firma-footer::before {
+  content: '✦';
+  font-style: normal;
+  font-size: 0.55rem;
+  opacity: 0.7;
+}
+.firma-footer:hover { opacity: 0.85; }
+
+/* ─── PATRÓN ASIMÉTRICO EN CARDS ─────────────────────────────── */
+.note-card-pattern {
+  position: absolute;
+  top: 0; right: 0;
+  width: 96px; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  transition: opacity 0.25s ease;
+}
+.note-card-pattern svg {
+  width: 100%; height: 100%;
+}
+
+/* ─── FIRMA ──────────────────────────────────────────────────── */
+.firma {
+  position: absolute;
+  bottom: 16px; right: 20px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--orange);
+  letter-spacing: 0.05em;
+  opacity: 0.38;
+  pointer-events: none;
+  user-select: none;
+  display: flex; align-items: center; gap: 5px;
+  transition: opacity 0.3s ease, color var(--t-slow) ease;
+}
+.firma::before {
+  content: '✦';
+  font-style: normal;
+  font-size: 0.5rem;
+  opacity: 0.8;
+}
+.firma:hover { opacity: 0.82; }
+
+.app-footer {
+  display: flex; justify-content: flex-end;
+  padding: 12px 36px 20px;
+  border-top: 1px solid var(--border);
+  transition: border-color var(--t-slow) ease;
+}
+.firma-footer {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--orange);
+  letter-spacing: 0.05em;
+  opacity: 0.38;
+  pointer-events: none;
+  user-select: none;
+  display: flex; align-items: center; gap: 5px;
+  transition: opacity 0.3s ease;
+}
+.firma-footer::before {
+  content: '✦';
+  font-style: normal;
+  font-size: 0.5rem;
+  opacity: 0.8;
+}
+.firma-footer:hover { opacity: 0.82; }
+
+/* ─── PATRÓN ASIMÉTRICO EN CARDS ─────────────────────────────── */
+.note-card-pattern {
+  position: absolute;
+  top: 0; right: 0;
+  width: 96px; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  transition: opacity 0.25s ease;
+}
+.note-card-pattern svg {
+  width: 100%; height: 100%;
+}

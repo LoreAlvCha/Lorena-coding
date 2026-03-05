@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Notas Privadas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- FONDO -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+  </div>
+
+  <!-- DECORACIÓN FLOTANTE (círculos y formas) -->
+  <div class="deco-shapes" aria-hidden="true">
+    <div class="deco-ring deco-ring-1"></div>
+    <div class="deco-ring deco-ring-2"></div>
+    <div class="deco-dot deco-dot-1"></div>
+    <div class="deco-dot deco-dot-2"></div>
+    <div class="deco-dot deco-dot-3"></div>
+    <div class="deco-line deco-line-1"></div>
+    <div class="deco-line deco-line-2"></div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login" class="screen">
+    <div class="auth-card">
+      <div class="auth-card-deco-tl"></div>
+      <div class="auth-card-deco-br"></div>
+      <div class="brand">
+        <div class="brand-icon-wrap">
+          <span class="brand-icon">✦</span>
+        </div>
+        <h1>Mis Notas</h1>
+        <p class="brand-sub">Tu espacio privado</p>
+      </div>
+      <div class="form-group">
+        <label for="loginEmail">Correo electrónico</label>
+        <input id="loginEmail" type="email" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Contraseña</label>
+        <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" onclick="login()">
+        <span class="btn-text">Iniciar sesión</span>
+        <span class="btn-arrow">→</span>
+      </button>
+      <p class="auth-switch">¿Sin cuenta? <a onclick="showRegister()">Regístrate gratis</a></p>
+      <span class="firma">By L. Álvarez</span>
+    </div>
+  </div>
+
+  <!-- REGISTRO -->
+  <div id="register" class="screen hidden">
+    <div class="auth-card">
+      <div class="auth-card-deco-tl"></div>
+      <div class="auth-card-deco-br"></div>
+      <div class="brand">
+        <div class="brand-icon-wrap">
+          <span class="brand-icon">✦</span>
+        </div>
+        <h1>Crear cuenta</h1>
+        <p class="brand-sub">Empieza hoy, gratis</p>
+      </div>
+      <div class="form-group">
+        <label for="regEmail">Correo electrónico</label>
+        <input id="regEmail" type="email" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="regPassword">Contraseña</label>
+        <input id="regPassword" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label for="regPassword2">Confirmar contraseña</label>
+        <input id="regPassword2" type="password" placeholder="Repite tu contraseña" autocomplete="new-password">
+      </div>
+      <button class="btn btn-primary" onclick="register()">
+        <span class="btn-text">Crear cuenta</span>
+        <span class="btn-arrow">→</span>
+      </button>
+      <p class="auth-switch">¿Ya tienes cuenta? <a onclick="showLogin()">Inicia sesión</a></p>
+      <span class="firma">By L. Álvarez</span>
+    </div>
+  </div>
+
+  <!-- NOTAS -->
+  <div id="notes" class="screen hidden">
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="header-icon-wrap">
+          <span class="brand-icon small">✦</span>
+        </div>
+        <span class="header-title">Mis Notas</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary btn-sm" onclick="openCreateModal()">
+          <span class="btn-plus">+</span> Nueva nota
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+      </div>
+    </header>
+    <main class="notes-main">
+      <div class="notes-header">
+        <div class="notes-header-left">
+          <h2 id="notesTitle">Tus notas</h2>
+          <span id="notesCount" class="notes-count"></span>
+        </div>
+      </div>
+      <div id="notesContainer" class="notes-grid"></div>
+    </main>
+    <footer class="app-footer">
+      <span class="firma-footer">By L. Álvarez</span>
+    </footer>
+  </div>
+
+  <!-- MODAL -->
+  <div id="noteModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-top-bar"></div>
+      <div class="modal-header">
+        <h3 id="modalTitle">Nueva nota</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="form-group">
+        <label for="modalTitulo">Título</label>
+        <input id="modalTitulo" type="text" placeholder="Dale un título a tu nota..." maxlength="100">
+        <span class="char-counter" id="counterTitulo">0 / 100</span>
+      </div>
+      <div class="form-group">
+        <label for="modalContenido">Contenido</label>
+        <textarea id="modalContenido" placeholder="Escribe lo que quieras..." maxlength="1000" rows="6"></textarea>
+        <span class="char-counter" id="counterContenido">0 / 1000</span>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" id="modalSaveBtn" onclick="saveNote()">Guardar nota</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
